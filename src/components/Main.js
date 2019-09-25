@@ -1,39 +1,98 @@
-import React from 'react'
-import { AvField, AvForm } from 'availity-reactstrap-validation';
-import { Button, FormGroup } from 'reactstrap';
-import {connect} from 'react-redux'
-import * as actionsCre from '../action/index'
+import React from "react";
+import { AvField, AvForm } from "availity-reactstrap-validation";
+import {Switch, Route, Link, BrowserRouter as Router} from 'react-router-dom'
+import { FormGroup } from "reactstrap";
+import { Button, Card, Container, Row, Col, Nav, Navbar, Form, FormControl } from "react-bootstrap";
+import { connect } from "react-redux";
+import * as actionsCre from "../action/index";
+import Home from "./secure/Home";
+import Customer from "./secure/customer/Customer";
+import CustomerFrom from "./secure/customer/CustomerForm";
+import Food from "./secure/food/Food";
+import FoodForm from "./secure/food/FoodFrom";
 
 class Main extends React.Component {
+  handelSubmit = (event, errors, values) => {
+      console.log("Data ",values );
+    if (errors.length === 0) {
+      this.props.loadToken(values.username, values.password);
+    }
+  };
 
-    handelSubmit=(event,errors,values)=>{
-        if(errors.length === 0){
-            this.props.loadToken(values.username,values.password)
-        }
+  render() {
+    if (this.props.token) {
+      return this.loadRouting();
     }
-    
-    render() { 
-        if(this.props.token){
-            return <h1> Hi Fi Your Token Geting SuccessFull</h1>
-        }
-        return this.loadLoginForm()
-    }
+    return this.loadLoginForm();
+  }
+  // This is login from
+  loadLoginForm = () => {
+    return (
+      <Container>
+        <Row className="justify-content-md-center">
+          <Col md="auto" style={{paddingTop:40}}    >
+            <Card >
+              <Card.Header>
+                <strong>Login Page</strong>
+              </Card.Header>
+              <Card.Body>
+                <AvForm onSubmit={this.handelSubmit}>
+                  <AvField type="text" name="username" label="UserName" required/><br />
+                  <AvField type="password" name="password" label="password" required   /><br />
+                  <FormGroup>
+                    <Button type="submit">Submit</Button> &nbsp;&nbsp;
+                    <Button type="button">Cancle</Button>
+                  </FormGroup>
+                </AvForm>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    );
+  };
 
-    loadLoginForm=()=>{
-        return <AvForm onSubmit={this.handelSubmit} >
-            <AvField type="text" name="username" label="UserName" required/> <br/>
-            <AvField type="password" name="password" label="password" required/><br/>
-            <FormGroup>
-            <Button>Submit</Button> &nbsp;&nbsp;
-            <Button type="button">Cancle</Button>
-          </FormGroup>
-        </AvForm>
-        
-    }
+  loadRoutes=()=>{
+    return <Switch>
+      <Route exact path="/" component={Home}></Route>
+      <Route path="/home" component={Home}></Route>
+      <Route path="/customer" component={Customer}></Route>
+      <Route path="/customer/add" component={CustomerFrom}></Route>
+      <Route path="/food" component={Food}></Route>
+      <Route path="/food/add" component={FoodForm}></Route>
+    </Switch>
+  }
+
+  // This is Routing Methods
+  loadRouting = () => {
+    return <Container>
+        <Row><Col>{this.loadNavBar()}</Col></Row>
+       <Row><Col>{this.loadRoutes()}</Col></Row>
+</Container>
+  };
+
+  loadNavBar=()=>{
+      return <Navbar bg="light" variant="light">
+      <Nav className="mr-auto">
+        <Nav.Link> <Link to="/home">Home</Link></Nav.Link>
+        <Nav.Link> <Link to="/customer">Customer</Link></Nav.Link>
+        <Nav.Link> <Link to="/food">Food</Link></Nav.Link>
+      </Nav>
+      <Form inline>
+        <FormControl type="text" placeholder="Search" className="mr-sm-2" />
+        <Button variant="outline-light">Search</Button>
+      </Form>
+    </Navbar>
+  }
+
 }
 
-const mapStateToProps=(state)=>{
-    return state
-}
- 
-export default  connect(mapStateToProps,actionsCre)(Main);
+
+const mapStateToProps = state => {
+  return state;
+};
+
+export default connect(
+  mapStateToProps,
+  actionsCre
+)(Main);
