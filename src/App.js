@@ -1,8 +1,16 @@
 import React from 'react';
+import {connect} from 'react-redux'
+import * as actionsCre from './action/index.js'
 import Main from './components/Main';
 
-const App=()=> {
-  return <Main />;
+class App extends React.Component {
+render(){
+  return <Main/>;
+}  
 }
 
-export default App;
+const mapStateToProps=(state)=>{
+  return state
+}
+
+export default connect(mapStateToProps,actionsCre)(App);
