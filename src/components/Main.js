@@ -1,9 +1,10 @@
 import React from "react";
 import { AvField, AvForm } from "availity-reactstrap-validation";
-import {Switch, Route, Link, BrowserRouter as Router} from 'react-router-dom'
+import { Switch, Route, Link } from 'react-router-dom'
 import { FormGroup } from "reactstrap";
 import { Button, Card, Container, Row, Col, Nav, Navbar, Form, FormControl } from "react-bootstrap";
 import { connect } from "react-redux";
+// ---------------------------------------------------------
 import * as actionsCre from "../action/index";
 import Home from "./secure/Home";
 import Customer from "./secure/customer/Customer";
@@ -12,8 +13,8 @@ import Food from "./secure/food/Food";
 import FoodForm from "./secure/food/FoodFrom";
 
 class Main extends React.Component {
+  // this functions handel the login
   handelSubmit = (event, errors, values) => {
-      console.log("Data ",values );
     if (errors.length === 0) {
       this.props.loadToken(values.username, values.password);
     }
@@ -21,56 +22,54 @@ class Main extends React.Component {
 
   render() {
     if (this.props.token) {
-      return this.loadRouting();
+      return this.loadFramework();
     }
     return this.loadLoginForm();
   }
-  // This is login from
+
+  // This functions loadin login from
   loadLoginForm = () => {
-    return (
-      <Container>
+    return <Container>
         <Row className="justify-content-md-center">
           <Col md="auto" style={{paddingTop:40}}    >
             <Card >
               <Card.Header>
-                <strong>Login Page</strong>
+                <center><h3>Login</h3></center>
               </Card.Header>
               <Card.Body>
                 <AvForm onSubmit={this.handelSubmit}>
-                  <AvField type="text" name="username" label="UserName" required/><br />
-                  <AvField type="password" name="password" label="password" required   /><br />
-                  <FormGroup>
-                    <Button type="submit">Submit</Button> &nbsp;&nbsp;
-                    <Button type="button">Cancle</Button>
-                  </FormGroup>
+                  <AvField type="text" name="username" label="UserName" placeholder="Ex : v@gmail.com" required/>
+                  <AvField type="password" name="password" label="Password" placeholder="Password" required/>
+                  <FormGroup> <center><Button type="submit" variant="outline-success">Login</Button></center></FormGroup>
                 </AvForm>
               </Card.Body>
             </Card>
           </Col>
         </Row>
       </Container>
-    );
   };
-
-  loadRoutes=()=>{
-    return <Switch>
-      <Route exact path="/" component={Home}></Route>
-      <Route path="/home" component={Home}></Route>
-      <Route path="/customer" component={Customer}></Route>
-      <Route path="/customer/add" component={CustomerFrom}></Route>
-      <Route path="/food" component={Food}></Route>
-      <Route path="/food/add" component={FoodForm}></Route>
-    </Switch>
-  }
 
   // This is Routing Methods
-  loadRouting = () => {
+  loadFramework = () => {
     return <Container>
-        <Row><Col>{this.loadNavBar()}</Col></Row>
-       <Row><Col>{this.loadRoutes()}</Col></Row>
-</Container>
+          <Row><Col>{this.loadNavBar()}</Col></Row>
+          <Row><Col>{this.loadRoutes()}</Col></Row>
+        </Container>
   };
 
+  // This Functions load Routes path with component
+  loadRoutes=()=>{
+    return <Switch>
+              <Route exact path="/" component={Home}></Route>
+              <Route path="/home" component={Home}></Route>
+              <Route path="/customer" component={Customer}></Route>
+              <Route path="/customer/add" component={CustomerFrom}></Route>
+              <Route path="/food" component={Food}></Route>
+              <Route path="/food/add" component={FoodForm}></Route>
+          </Switch>
+  }
+
+  // This functions loading navbar 
   loadNavBar=()=>{
       return <Navbar bg="light" variant="light">
       <Nav className="mr-auto">

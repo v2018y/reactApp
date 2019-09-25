@@ -1,6 +1,7 @@
 
 const INITIAL_STATE = {
-    token: ''
+    token: '',
+    userData:[]
 };
 
 
@@ -11,6 +12,12 @@ export default (state = INITIAL_STATE, action) => {
                 ...state,
                 token: action.token
             };
+        case "SAVE_USER":
+            return {
+                ...state,
+                userData: action.token
+            };
+        
         default: return state;
     }
 };
