@@ -20,11 +20,25 @@ export function loadToken(username,password) {
 // 2) Get user
 export function loadUser(token) {
     return (dispatch) => {
-        return axios.get(API_URL + "/hotel-api/api/user",{headers: {
+        return axios.get(API_URL + "/hotel-api/api/Htable",{headers: {
             'Authorization': 'Bearer '+token
         }}).then(
             response => {
                 dispatch(saveUser(response.data));
+            }).catch(err=>{
+                console.log("Error : ",err);
+            })
+    }
+}
+
+// 3) Get Food 
+export function loadFood(token){
+    return (dispatch) => {
+        return axios.get(API_URL + "/hotel-api/api/foodItem",{headers: {
+            'Authorization': 'Bearer '+token
+        }}).then(
+            response => {
+                dispatch(saveFood(response.data));
             }).catch(err=>{
                 console.log("Error : ",err);
             })
@@ -47,4 +61,10 @@ export function saveUser(data) {
         userData: data
     }
 }
-
+// This is Save Food 
+export function saveFood(data){
+    return {
+        type:"SAVE_FOOD",
+        foodData: data
+    }
+}

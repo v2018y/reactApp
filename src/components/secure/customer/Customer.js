@@ -7,6 +7,7 @@ class Customer extends React.Component {
 
  componentDidMount=()=>{
     if(this.props.token){ 
+      console.log("th ",this.props)
         this.props.loadUser(this.props.token.token)
     }
  }

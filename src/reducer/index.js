@@ -1,7 +1,8 @@
 
 const INITIAL_STATE = {
     token: '',
-    userData:[]
+    userData:[],
+    foodData:[]
 };
 
 
@@ -15,8 +16,13 @@ export default (state = INITIAL_STATE, action) => {
         case "SAVE_USER":
             return {
                 ...state,
-                userData: action.token
+                userData: action.userData
             };
+        case "SAVE_FOOD":
+            return {
+                ...state,
+                userData: action.foodData
+        };
         
         default: return state;
     }
