@@ -21,7 +21,7 @@ export default (state = INITIAL_STATE, action) => {
         case "SAVE_FOOD":
             return {
                 ...state,
-                userData: action.foodData
+                foodData: action.foodData
         };
         
         default: return state;

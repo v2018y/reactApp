@@ -44,6 +44,18 @@ export function loadFood(token){
             })
     }
 }
+// 4) Save Food
+export function saveFoodData(token,postData){
+    var config = {
+        headers: {'Authorization': 'Bearer '+token}
+    };
+    
+    return(dispatch)=>{
+        return axios.post(API_URL+'/hotel-api/api/foodItem',postData,config)
+        .then(response=>{dispatch(loadFood(token))})
+        .catch(err =>{ console.log("Error : ",err)})
+    }
+}
 
 
 // -------------------------------------------------------------
