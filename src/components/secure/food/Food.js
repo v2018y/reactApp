@@ -3,20 +3,48 @@ import { connect } from 'react-redux';
 import * as actionsCre from "../../../action/index";
 import { Table, Button, Container, Row, Col, Card } from 'react-bootstrap';
 import { AvField, AvForm } from "availity-reactstrap-validation";
-import { FormGroup } from "reactstrap";
+import { FormGroup, Modal, ModalBody, ModalHeader,ModalFooter } from "reactstrap";
 
 
 class Food extends React.Component {
+
+    state={
+        deleteModel : false,
+        updateModel : false,
+        id : ''
+    }
 
     componentDidMount = () => {
         if (this.props.token) {
             this.props.loadFood(this.props.token.token)
         }
     }
-    // This Method Handel Post Method for Calling Actions
+    // This Method Handel Post Actions for Executing
     handelPostSubmit = (event, errors, values) => {
         if (errors.length === 0) {
             this.props.saveFoodData(this.props.token.token, values)
+        }
+    }
+    // This Method Handel Put Actions for Executing
+    handelPutSubmit=(event, errors, values)=>{
+        if (errors.length === 0) {
+            this.setState({updateModel: !this.state.updateModel})
+            let newData={
+                ...values,
+                foId: this.state.id
+            }
+            this.props.updateFoodData(this.props.token.token, newData)
+        }
+    }
+     // This Method Handel Delete Actions for Executing
+    handelDeleteSubmit =(event, errors, values)=>{
+        if (errors.length === 0) {
+            this.setState({deleteModel: !this.state.deleteModel})
+            let newData={
+                ...values,
+                foId: this.state.id
+            }
+            this.props.deleteFoodData(this.props.token.token, newData)
         }
     }
 
@@ -24,21 +52,19 @@ class Food extends React.Component {
         return <Container>
                     {this.loadAddFood()}
                     {this.loadFoodTable()}
+                    { (this.state.updateModel ||this.state.deleteModel) && this.loadDelEditModal()}
                </Container>;
     }
     // This Method Load the Adding Food UI
-    loadAddFood = (foodRec) => {
+    loadAddFood = () => {
         return <Row className="justify-content-md-left">
             <Col >
                 <Card >
                     <Card.Body>
                         <AvForm onSubmit={this.handelPostSubmit}>
-                            <AvField type="text" name="foName" label="Enter Food Name" value={foodRec ? foodRec.foName : ''} placeholder="Ex: Pav Bahji" errorMessage="Enter Food vaild name" required />
-                            <AvField type="number" name="foRate" label="Enter Food Price" value={foodRec ? foodRec.foRate : ''} placeholder="Ex: 20" errorMessage="Enter Food vaild Rate" required />
-                            <FormGroup>
-                                <Button type="submit" variant="outline-success">Submit</Button> &nbsp; &nbsp;
-                                <Button type="button" variant="outline-success">Cancle</Button>
-                            </FormGroup>
+                            <AvField type="text" name="foName" label="Enter Food Name" placeholder="Ex: Pav Bahji" errorMessage="Enter Food vaild name" required />
+                            <AvField type="number" name="foRate" label="Enter Food Price" placeholder="Ex: 20" errorMessage="Enter Food vaild Rate" required />
+                            <FormGroup> <Button type="submit" variant="outline-success">Save Food Item</Button></FormGroup>
                         </AvForm>
                     </Card.Body>
                 </Card>
@@ -68,22 +94,44 @@ class Food extends React.Component {
                 <td>{key}</td>
                 <td>{food.foName}</td>
                 <td>{food.foRate}</td>
-                <td><Button  onClick={()=>this.loadEdit(food.foId)} >Edit</Button></td>
-                <td><Button onClick={()=> this.loadDelete(food.foId)}>Delete</Button></td>
+                <td><Button  onClick={()=>this.setState({ updateModel: !this.state.updateModel,id: food.foId })} >Edit</Button></td>
+                <td><Button onClick={()=> this.setState({ deleteModel: !this.state.deleteModel,id: food.foId })}>Delete</Button></td>
             </tr>
         });
         return rows;
     }
-    // This Method calling Load edit from
-    loadEdit=(foodid)=>{
-        console.log("id ",foodid)
-        let data= this.props.foodData.filter(data=> data.foId===foodid);
-        console.log("Data ",data)
-        this.loadAddFood(data);
-        this.forceUpdate();
-    }
-    loadDelete=(foodId)=>{
-        console.log("FoodId : ",foodId)
+    // This Method Load the Edit and Update Modal for Item
+    loadDelEditModal=()=>{
+        let data= this.props.foodData.filter(data=> data.foId===this.state.id);
+        let headername = this.state.updateModel ? "Edit Food Item" : "Delete Food Item";
+        let openVarible = this.state.updateModel ? this.state.updateModel : this.state.deleteModel;
+        let buttonText=this.state.updateModel ? "Edit Food Item" : "Delete Food Item";
+        let closeStateVariableName = this.state.updateModel ? {updateModel : !this.state.updateModel} : {deleteModel : !this.state.deleteModel};
+        let variantColor= this.state.updateModel ? "outline-success" :"outline-danger";
+        let handelMethod = this.state.updateModel ? this.handelPutSubmit : this.handelDeleteSubmit
+        return <Modal
+              size="lg"
+              aria-labelledby="contained-modal-title-vcenter"
+              centered
+              isOpen={openVarible}
+            >
+            <AvForm onSubmit={handelMethod}>
+              <ModalHeader>
+                <strong id="contained-modal-title-vcenter"> {headername} </strong>
+              </ModalHeader>
+              <ModalBody>
+                    <Row>
+                        <Col><AvField type="text" name="foName" label="Enter Food Name" value={data[0].foName} placeholder="Ex: Pav Bahji" errorMessage="Enter Food vaild name" required /></Col>
+                        <Col> <AvField type="number" name="foRate" label="Enter Food Price" value={data[0].foRate} placeholder="Ex: 20" errorMessage="Enter Food vaild Rate" required /></Col>
+                    </Row>    
+              </ModalBody>
+              <ModalFooter>
+                 <Button type="submit" variant={variantColor}>{buttonText}</Button> &nbsp; &nbsp;
+                <Button onClick={() => { this.setState(closeStateVariableName)}}>Close</Button>
+              </ModalFooter>
+              </AvForm>
+            </Modal>
+            
     }
 }
 

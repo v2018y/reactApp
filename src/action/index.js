@@ -56,6 +56,29 @@ export function saveFoodData(token,postData){
         .catch(err =>{ console.log("Error : ",err)})
     }
 }
+// 5) Update Food
+export function updateFoodData(token,putData){
+    var config = {
+        headers: {'Authorization': 'Bearer '+token}
+    };
+    return(dispatch)=>{
+        return axios.put(API_URL+'/hotel-api/api/foodItem/'+putData.foId,putData,config)
+        .then(response=>{dispatch(loadFood(token))})
+        .catch(err =>{ console.log("Error : ",err)})
+    }
+}
+// 5) Delete Food
+export function deleteFoodData(token,delData){
+    var config = {
+        headers: {'Authorization': 'Bearer '+token}
+    };
+    return(dispatch)=>{
+        return axios.delete(API_URL+'/hotel-api/api/foodItem/'+delData.foId,config)
+        .then(response=>{dispatch(loadFood(token))})
+        .catch(err =>{ console.log("Error : ",err)})
+    }
+}
+
 
 
 // -------------------------------------------------------------
