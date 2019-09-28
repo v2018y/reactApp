@@ -27,17 +27,17 @@ class Food extends React.Component {
                </Container>;
     }
     // This Method Load the Adding Food UI
-    loadAddFood = () => {
+    loadAddFood = (foodRec) => {
         return <Row className="justify-content-md-left">
             <Col >
                 <Card >
                     <Card.Body>
                         <AvForm onSubmit={this.handelPostSubmit}>
-                            <AvField type="text" name="foName" label="Enter Food Name" placeholder="Ex: Pav Bahji" required />
-                            <AvField type="number" name="foRate" label="Enter Food Price" placeholder="Ex: 20" required />
+                            <AvField type="text" name="foName" label="Enter Food Name" value={foodRec ? foodRec.foName : ''} placeholder="Ex: Pav Bahji" errorMessage="Enter Food vaild name" required />
+                            <AvField type="number" name="foRate" label="Enter Food Price" value={foodRec ? foodRec.foRate : ''} placeholder="Ex: 20" errorMessage="Enter Food vaild Rate" required />
                             <FormGroup>
                                 <Button type="submit" variant="outline-success">Submit</Button> &nbsp; &nbsp;
-                        <Button type="button" variant="outline-success">Cancle</Button>
+                                <Button type="button" variant="outline-success">Cancle</Button>
                             </FormGroup>
                         </AvForm>
                     </Card.Body>
@@ -64,15 +64,26 @@ class Food extends React.Component {
     // This method return the no of Rows in load tbeel form API result
     loadTabelRows = (foodItem) => {
         let rows = foodItem.map((food, key) => {
-            return <tr>
+            return <tr key={key}>
                 <td>{key}</td>
                 <td>{food.foName}</td>
                 <td>{food.foRate}</td>
-                <td><Button >Edit</Button></td>
-                <td><Button >Delete</Button></td>
+                <td><Button  onClick={()=>this.loadEdit(food.foId)} >Edit</Button></td>
+                <td><Button onClick={()=> this.loadDelete(food.foId)}>Delete</Button></td>
             </tr>
         });
         return rows;
+    }
+    // This Method calling Load edit from
+    loadEdit=(foodid)=>{
+        console.log("id ",foodid)
+        let data= this.props.foodData.filter(data=> data.foId===foodid);
+        console.log("Data ",data)
+        this.loadAddFood(data);
+        this.forceUpdate();
+    }
+    loadDelete=(foodId)=>{
+        console.log("FoodId : ",foodId)
     }
 }
 
