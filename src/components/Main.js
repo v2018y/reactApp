@@ -4,6 +4,7 @@ import { Switch, Route, Link } from 'react-router-dom'
 import { FormGroup } from "reactstrap";
 import { Button, Card, Container, Row, Col, Nav, Navbar, Form, FormControl } from "react-bootstrap";
 import { connect } from "react-redux";
+import Loader from 'react-loader-spinner';
 // ---------------------------------------------------------
 import * as actionsCre from "../action/index";
 import Home from "./secure/Home";
@@ -13,9 +14,13 @@ import Food from "./secure/food/Food";
 import FoodForm from "./secure/food/FoodFrom";
 
 class Main extends React.Component {
+  state={
+    loading: false
+  }
   // this functions handel the login
   handelSubmit = (event, errors, values) => {
     if (errors.length === 0) {
+      this.setState({loading : !this.state.loading})
       this.props.loadToken(values.username, values.password);
     }
   };
@@ -25,6 +30,15 @@ class Main extends React.Component {
       return this.loadFramework();
     }
     return this.loadLoginForm();
+  }
+  // This method loading spiiner
+  loadSpinner=()=>{
+    return <Loader
+    type="Oval"
+    color="#00BFFF"
+    height={100}
+    width={100}
+   />
   }
 
   // This functions loadin login from
@@ -38,10 +52,11 @@ class Main extends React.Component {
               </Card.Header>
               <Card.Body>
                 <AvForm onSubmit={this.handelSubmit}>
-                  <AvField type="text" name="username" label="UserName" placeholder="Ex : v@gmail.com" required/>
-                  <AvField type="password" name="password" label="Password" placeholder="Password" required/>
+                  <AvField type="text" name="username" label="Enter UserName" errorMessage="Enter vaild username" placeholder="Ex : v@gmail.com" required/>
+                  <AvField type="password" name="password" label="Enter Password" errorMessage="Enter vaild password" placeholder="Password" required/>
                   <FormGroup> <center><Button type="submit" variant="outline-success">Login</Button></center></FormGroup>
                 </AvForm>
+                <center>{this.state.loading && this.loadSpinner()}</center>
               </Card.Body>
             </Card>
           </Col>
