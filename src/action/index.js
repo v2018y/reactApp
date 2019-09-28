@@ -9,12 +9,15 @@ export function loadToken(username,password) {
         return axios.post(API_URL + "/oauth/token",{
             username: username,
             password: password
-        }).then(
-            response => {
-                dispatch(saveToken(response.data));
-            }).catch(err=>{
-                console.log("Error : ",err);
-            })
+        })
+        .then(response => { 
+            dispatch(loadMessage('success','Login Successfull'))
+            dispatch(saveToken(response.data))
+        })
+        .catch(err=>{
+                console.table("Error : ",typeof err);
+         dispatch(loadMessage('danger','Sorry you are not provied vaild credtional'));
+        })
     }
 }
 // 2) Get user
@@ -103,4 +106,11 @@ export function saveFood(data){
         foodData: data
     }
 }
-// This functions loading 
+// This functions message
+export function loadMessage(color,message){
+    return {
+        type: "NOTIFICATIONS",
+        color:color,
+        message: message
+    }
+} 
