@@ -85,7 +85,7 @@ class Main extends React.Component {
     return <Switch>
       <Route exact path="/" component={Home}></Route>
       <Route path="/home" component={Home}></Route>
-      <Route path="/customer" component={Customer}></Route>
+      <Route path="/customer" component={CustomerFrom}></Route>
       <Route path="/customer/add" component={CustomerFrom}></Route>
       <Route path="/food" component={Food}></Route>
       <Route path="/food/add" component={FoodForm}></Route>

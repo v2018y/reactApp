@@ -1,12 +1,12 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import * as actionsCre from "../../../action/index";
+// import { connect } from 'react-redux';
+// import * as actionsCre from "../../../action/index";
 import { Table, Button, Container, Row, Col, Card } from 'react-bootstrap';
 import { AvField, AvForm } from "availity-reactstrap-validation";
 import { FormGroup, Modal, ModalBody, ModalHeader,ModalFooter } from "reactstrap";
 
 
-class Food extends React.Component {
+class FormModal extends React.Component {
 
     state={
         deleteModel : false,
@@ -14,30 +14,29 @@ class Food extends React.Component {
         id : ''
     }
 
+    // This Method Handel GET Actions for Executing
     componentDidMount = () => {
-        if (this.props.token) {
-            this.props.loadFood(this.props.token.token)
-        }
+        this.props.getMethod(this.props.token)
     }
+
     // This Method Handel Post Actions for Executing
     handelPostSubmit = (event, errors, values) => {
         if (errors.length === 0) {
-            this.props.saveFoodData(this.props.token.token, values)
+            this.props.saveMethod(this.props.token, values)
         }
     }
     // This Method Handel Put Actions for Executing
     handelPutSubmit=(event, errors, values)=>{
         if (errors.length === 0) {
             this.setState({updateModel: !this.state.updateModel})
-            console.log("data ",values)
-            this.props.updateFoodData(this.props.token.token, values)
+            this.props.updateMethod(this.props.token, values)
         }
     }
      // This Method Handel Delete Actions for Executing
     handelDeleteSubmit =(event, errors, values)=>{
         if (errors.length === 0) {
             this.setState({deleteModel: !this.state.deleteModel})
-            this.props.deleteFoodData(this.props.token.token, values)
+            this.props.deleteMethod(this.props.token, values)
         }
     }
 
@@ -55,8 +54,16 @@ class Food extends React.Component {
                 <Card >
                     <Card.Body>
                         <AvForm onSubmit={this.handelPostSubmit}>
-                            <AvField type="text" name="foName" label="Enter Food Name" placeholder="Ex: Pav Bahji" errorMessage="Enter Food vaild name" required />
-                            <AvField type="number" name="foRate" label="Enter Food Price" placeholder="Ex: 20" errorMessage="Enter Food vaild Rate" required />
+                            {this.props.fileds.map((filed,key)=>{
+                                return <AvField 
+                                type={filed.type} 
+                                name={filed.apiKey} 
+                                label={filed.filedName && `Enter ${filed.filedName}`} 
+                                placeholder= {filed.placeholder && filed.filedName }
+                                errorMessage= {filed.errorMessage && filed.errorMessage}
+                                required ={FileReader.required && filed.required}
+                                />
+                            })}
                             <FormGroup> <Button type="submit" variant="outline-success">Save Food Item</Button></FormGroup>
                         </AvForm>
                     </Card.Body>
@@ -71,34 +78,37 @@ class Food extends React.Component {
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Food Name</th>
-                        <th>Food Rate</th>
+                        {this.props.fileds.map((filed,key)=>{
+                               return <th>{filed.filedName && filed.filedName}</th> 
+                        })}
                         <th colSpan={2}></th>
                     </tr>
                 </thead>
-                {this.props.foodData.length > 0 ? <tbody>{this.loadTabelRows(this.props.foodData)}</tbody> : ''}
+                {this.props.stateData.length > 0 && <tbody>{this.loadTabelRows(this.props.stateData)}</tbody>}
             </Table>
         );
     };
     // This method return the no of Rows in load tbeel form API result
-    loadTabelRows = (foodItem) => {
-        let rows = foodItem.map((food, key) => {
+    loadTabelRows = (data) => {
+        let rows = data.map((food, key) => {
             return <tr key={key}>
                 <td>{key}</td>
-                <td>{food.foName}</td>
-                <td>{food.foRate}</td>
-                <td><Button  onClick={()=>this.setState({ updateModel: !this.state.updateModel,id: food.foId })} >Edit</Button></td>
-                <td><Button onClick={()=> this.setState({ deleteModel: !this.state.deleteModel,id: food.foId })}>Delete</Button></td>
+                <td><Button  onClick={()=>this.setState({ updateModel: !this.state.updateModel,
+                    // id: food.foId 
+                    })} >Edit</Button></td>
+                <td><Button onClick={()=> this.setState({ deleteModel: !this.state.deleteModel,
+                    // id: food.foId 
+                    })}>Delete</Button></td>
             </tr>
         });
         return rows;
     }
     // This Method Load the Edit and Update Modal for Item
     loadDelEditModal=()=>{
-        let data= this.props.foodData.filter(data=> data.foId===this.state.id);
-        let headername = this.state.updateModel ? "Edit Food Item" : "Delete Food Item";
+        let data= this.props.stateData.filter(data=> data.foId===this.state.id);
+        let headername = this.state.updateModel ? `Edit ${this.props.componentName}`  : `Delete ${this.props.componentName}`;
         let openVarible = this.state.updateModel ? this.state.updateModel : this.state.deleteModel;
-        let buttonText=this.state.updateModel ? "Edit Food Item" : "Delete Food Item";
+        let buttonText=this.state.updateModel ? `Edit ${this.props.componentName}`  : `Delete ${this.props.componentName}`;
         let closeStateVariableName = this.state.updateModel ? {updateModel : !this.state.updateModel} : {deleteModel : !this.state.deleteModel};
         let variantColor= this.state.updateModel ? "outline-success" :"outline-danger";
         let handelMethod = this.state.updateModel ? this.handelPutSubmit : this.handelDeleteSubmit
@@ -114,13 +124,21 @@ class Food extends React.Component {
               </ModalHeader>
               <ModalBody>
                     <Row>
-                        <AvField type="hidden" value={data[0].foId} name="foId"  required />
-                        <Col><AvField type="text" name="foName" label="Enter Food Name" value={data[0].foName} placeholder="Ex: Pav Bahji" errorMessage="Enter Food vaild name" required /></Col>
-                        <Col> <AvField type="number" name="foRate" label="Enter Food Price" value={data[0].foRate} placeholder="Ex: 20" errorMessage="Enter Food vaild Rate" required /></Col>
+                        <AvField type="hidden" name="foId" value={data[0].foId}   required /> 
+                        {this.props.fileds.map((filed,key)=>{
+                                return <AvField 
+                                type={filed.type} 
+                                name={filed.apiKey} 
+                                label={filed.filedName && `Enter ${filed.filedName}`} 
+                                placeholder= {filed.placeholder && filed.filedName }
+                                errorMessage= {filed.errorMessage && filed.errorMessage}
+                                required ={FileReader.required && filed.required}
+                                />
+                        })}   
                     </Row>    
               </ModalBody>
               <ModalFooter>
-                 <Button type="submit" variant={variantColor}>{buttonText}</Button> &nbsp; &nbsp;
+                <Button type="submit" variant={variantColor}>{buttonText}</Button> &nbsp; &nbsp;
                 <Button onClick={() => { this.setState(closeStateVariableName)}}>Close</Button>
               </ModalFooter>
               </AvForm>
@@ -129,7 +147,4 @@ class Food extends React.Component {
     }
 }
 
-const mapToPorps = (state) => {
-    return state;
-};
-export default connect(mapToPorps, actionsCre)(Food);
+export default FormModal;
