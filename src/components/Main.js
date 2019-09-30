@@ -8,10 +8,8 @@ import Loader from 'react-loader-spinner';
 // ---------------------------------------------------------
 import * as actionsCre from "../action/index";
 import Home from "./secure/Home";
-import Customer from "./secure/customer/Customer";
-import CustomerFrom from "./secure/customer/CustomerForm";
 import Food from "./secure/food/Food";
-import FoodForm from "./secure/food/FoodFrom";
+import Customer from "./secure/customer/Customer";
 
 class Main extends React.Component {
   state = {
@@ -85,10 +83,8 @@ class Main extends React.Component {
     return <Switch>
       <Route exact path="/" component={Home}></Route>
       <Route path="/home" component={Home}></Route>
-      <Route path="/customer" component={CustomerFrom}></Route>
-      <Route path="/customer/add" component={CustomerFrom}></Route>
+      <Route path="/customer" component={Customer}></Route>
       <Route path="/food" component={Food}></Route>
-      <Route path="/food/add" component={FoodForm}></Route>
     </Switch>
   }
 
