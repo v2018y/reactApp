@@ -1,5 +1,5 @@
 import React from "react";
-import FormModal from '../data/formModel';
+import FormUI from 'vany-crud-modal';
 import { connect } from 'react-redux';
 import * as actionsCre from "../../../action/index";
 
@@ -10,20 +10,21 @@ class Customer extends React.Component {
 
 render(){
     const filed=[
-        {apiKey:'cName',filedName:"Customer Name",type:"text",required:'required',errorMessage:"Enter Customer Name",placeholder:"Ex: vishva"},
-        {apiKey:'cSurname',filedName:"cSurname ",type:"text",required:'required',errorMessage:"Enter Customer Surname",placeholder:"Ex: jony"},
-        {apiKey:'cEmail',filedName:"Customer Email",type:"text",required:'required',errorMessage:"Enter Customer Email",placeholder:"Ex: admin@admin.com"}
+        {apiKey:'cName',label:"Customer Name",type:"text",required:true,errorMessage:"Enter Customer Name",placeholder:"Ex: vishva"},
+        {apiKey:'cSurname',label:"cSurname ",type:"text",required:true,errorMessage:"Enter Customer Surname",placeholder:"Ex: jony"},
+        {apiKey:'cEmail',label:"Customer Email",type:"text",required:true,errorMessage:"Enter Customer Email",placeholder:"Ex: admin@admin.com"}
     ]
 
-    return <FormModal 
+    return <FormUI 
     token={this.props.token.token} 
     getMethod={this.getCust}
     saveMethod={this.saveCust}
     updateMethod={this.updateCust}
     deleteMethod={this.deleteCust}
-    fileds={filed}
+    fields={filed}
     componentName="Customer"
     stateData={this.state.customerData}
+    primaryKey="cuId"
     />
 }
 getCust=(token,data)=>{
