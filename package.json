@@ -17,11 +17,11 @@
     "redux": "^4.0.4",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "vany-crud-modal": "^1.0.13"
+    "vany-crud-modal": "^1.0.15"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build --prod",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
