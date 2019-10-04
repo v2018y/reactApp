@@ -6,7 +6,7 @@ import * as actionsCre from "../../../action/index";
 class Customer extends React.Component {
   state={
     customerData:[]
-}
+  }
 
 render(){
     const filed=[
