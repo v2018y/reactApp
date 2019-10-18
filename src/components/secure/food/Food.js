@@ -21,20 +21,23 @@ class Food extends React.Component {
     }
 
     render() {
+        const { token, foodData, color, message }=this.props
         const filed = [
             { apiKey: 'foName', label: "Food Name", type: "text", required: true, errorMessage: "Enter Food Name", placeholder: "Ex: Pav Bahji" },
             { apiKey: 'foRate', label: "Food Price", type: "text", required: true, errorMessage: "Enter Food Price", placeholder: "Ex: jony" },
         ]
         return <FormUI
-            token={this.props.token.token}
+            token={token.token}
             getMethod={this.getFoodData}
             saveMethod={this.handelPostSubmit}
             updateMethod={this.handelPutSubmit}
             deleteMethod={this.handelDeleteSubmit}
             fields={filed}
             componentName="Food"
-            stateData={this.props.foodData}
+            stateData={foodData}
             primaryKey="foId"
+            alertColor={color}
+            alertMessage={message}
         />
     }
 }
