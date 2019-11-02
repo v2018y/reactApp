@@ -1,8 +1,6 @@
 import React from 'react'
 
-class Home extends React.Component{
-    render(){
-        return <h1>Home</h1>
-    }
+const Home=()=>{
+    return <h1> Welcome to the Vany Company Cloud Base Project</h1>
 }
 export default Home
