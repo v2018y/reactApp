@@ -4,11 +4,11 @@ const API_URL = "http://vanyzuulapigateway.herokuapp.com"
 
 // ------------------ This is dispath Actions Call any Component
 //  1) Load Token
-export function loadToken(username, password) {
+export function loadToken(userData) {
     return (dispatch) => {
         return axios.post(API_URL + "/oauth/token", {
-            username: username,
-            password: password
+            username: userData.username,
+            password: userData.password
         })
             .then(response => {
                 dispatch(loadMessage('success', 'Login Successfull'))
