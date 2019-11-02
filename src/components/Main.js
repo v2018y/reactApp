@@ -25,7 +25,7 @@ class Main extends Component {
 
   // This is loading main Dashborad Sturctres
   loadSecureFramework = () => {
-    return <Container>
+    return <Container className="justify-content-md-center">
       <Row><Col><NavBar /></Col></Row>
       <Row><Col><Routes /></Col></Row>
     </Container>
