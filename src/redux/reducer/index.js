@@ -1,10 +1,10 @@
 
 const INITIAL_STATE = {
     token: '',
-    userData:[],
-    foodData:[],
-    color:'',
-    message:''
+    userData: [],
+    foodData: [],
+    color: '',
+    message: ''
 };
 
 
@@ -24,14 +24,14 @@ export default (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 foodData: action.foodData
-        };
+            };
         case "NOTIFICATIONS":
             return {
                 ...state,
                 color: action.color,
                 message: action.message
-        };
-        
+            };
+
         default: return state;
     }
 };

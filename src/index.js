@@ -2,25 +2,17 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {BrowserRouter} from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 // Redux code import
-import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
-import thunk from "redux-thunk";
-import logger from 'redux-logger'
-import reducer from "./reducer/index.js";
-
-
-// create store
-let store = createStore(reducer, applyMiddleware(thunk,logger));
+import store from "./redux/store/Store";
 
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-    <App/>
-
+      <App />
     </BrowserRouter>
-      </Provider>,
+  </Provider>,
   document.getElementById("root")
 );
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import FormUI from 'vany-crud-modal';
-import * as actionsCre from "../../../action/index";
+import * as actionsCre from "../../../redux/action/index";
 class Food extends React.Component {
      // This Method Handel Get Actions for Executing
     getFoodData = (token) => {

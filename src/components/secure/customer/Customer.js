@@ -1,7 +1,7 @@
 import React from "react";
 import FormUI from 'vany-crud-modal';
 import { connect } from 'react-redux';
-import * as actionsCre from "../../../action/index";
+import * as actionsCre from "../../../redux/action/index";
 
 class Customer extends React.Component {
   state={

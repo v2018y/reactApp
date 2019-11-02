@@ -6,10 +6,11 @@ import { Button, Card, Container, Row, Col, Nav, Navbar, Form, FormControl, Aler
 import { connect } from "react-redux";
 import Loader from 'react-loader-spinner';
 // ---------------------------------------------------------
-import * as actionsCre from "../action/index";
+import * as actionsCre from "../redux/action/index";
 import Home from "./secure/Home";
 import Food from "./secure/food/Food";
 import Customer from "./secure/customer/Customer";
+import { PrivateRoute } from "./routes/PrivateRoute";
 
 class Main extends React.Component {
   state = {
@@ -25,12 +26,16 @@ class Main extends React.Component {
     }
   };
 
+  
   render() {
     if (this.props.token && !this.props.color) {
       return this.loadFramework();
     }
     return this.loadLoginForm();
   }
+
+
+
   // This method loading spiiner
   loadSpinner = () => {
     return <Loader type="Oval" color="#00BFFF" height={100} width={100} />
@@ -81,8 +86,8 @@ class Main extends React.Component {
   // This Functions load Routes path with component
   loadRoutes = () => {
     return <Switch>
-      <Route exact path="/" component={Home}></Route>
-      <Route path="/home" component={Home}></Route>
+      <PrivateRoute exact path="/" component={Home} />
+      <PrivateRoute path="/home" component={Home} />
       <Route path="/customer" component={Customer}></Route>
       <Route path="/food" component={Food}></Route>
     </Switch>
