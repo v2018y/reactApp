@@ -1,41 +1,47 @@
 import React from 'react'
 import { SMSForm } from './secure/SMSForm'
-import { Card, CardBody } from 'reactstrap'
+import { Card, CardBody, Col, Alert } from 'reactstrap'
 import { MobileNo } from './config/config'
 import SMSService from './service/SMSService'
+import { Header } from './Header'
+import { Footer } from './Footer'
 class Main extends React.Component {
 
     dataSubmit = (event, errors, values) => {
         console.log(errors, values)
-        if(errors.length===0){
-            let message=values.userName+" regsiter on "+values.userDate+" "+values.userTabel;
-            let bodyData={
+        if (errors.length === 0) {
+            let message = values.userName + " regsiter on " + values.userDate + " " + values.userTabel;
+            let bodyData = {
                 message,
                 numbers: MobileNo
             }
             try {
-                new SMSService().sendSMS(this.success,this.error,bodyData);
+                new SMSService().sendSMS(this.success, this.error, bodyData);
             } catch (error) {
                 this.error(error);
             }
         }
     }
 
-    success=(data)=>{
-        console.log(data)
+    success = (data) => {
+        return <Alert color="primary">{data.message[0]}</Alert>
     }
 
-    error=(error)=>{
-        console.log(error)
+    error = (error) => {
+        return <Alert color="danger">{error}</Alert>
     }
 
     render() {
         return <>
+            <Header />
             <Card>
-                <CardBody>
-                    <SMSForm dataSubmit={this.dataSubmit} />
+                <CardBody >
+                    <Col sm={{ offset: 2 }}>
+                        <SMSForm dataSubmit={this.dataSubmit} />
+                    </Col>
                 </CardBody>
             </Card>
+            <Footer />
         </>
     }
 }
