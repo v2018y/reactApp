@@ -12,19 +12,19 @@ export const SMSForm = (props) => <AvForm onSubmit={props.dataSubmit}>
     <FormGroup row>
         <Label sm={2}>Enter Your Name</Label>
         <Col sm={10}>
-            <AvField type="text" name="name" id="examplePassword" placeholder="Enter Your Name" />
+            <AvField type="text" name="userName" id="examplePassword" placeholder="Enter Your Name" />
         </Col>
     </FormGroup>
     <FormGroup row>
         <Label sm={2}>Select Date</Label>
         <Col sm={10}>
-            <AvField type="date" name="date" placeholder="Enter Your Name" />
+            <AvField type="date" name="userDate" placeholder="Enter Your Name" />
         </Col>
     </FormGroup>
     <FormGroup row>
         <Label sm={2}>Select Tabel</Label>
         <Col sm={10}>
-            <AvField type="select" name="select" helpMessage="Idk, this is an example. Deal with it!">
+            <AvField type="select" name="userTabel" helpMessage="Select the tabel for registrations!">
                 <option>Tabel 1</option>
                 <option>Tabel 2</option>
                 <option>Tabel 3</option>
