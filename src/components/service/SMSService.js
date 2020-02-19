@@ -11,6 +11,7 @@ class SMSService extends MainClass{
         }
         try {
             let result= await this.processApi(data);
+            console.log("result",result)
             successMethod && successMethod(result);
         } catch (error) {
             errorMethod && errorMethod(error);
